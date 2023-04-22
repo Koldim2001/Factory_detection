@@ -1,4 +1,4 @@
 /detect_dataset
 **/__pycache__/ 
 .ipynb_checkpoints
-/augmented_data
+/augmented_dataset
