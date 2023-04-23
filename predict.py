@@ -5,6 +5,7 @@
 treshhold - значение минимального порога уверенности классификатора в боксе
 classes - list, содержащий наименования классов
 plt_show = 'False'-тогда выводим ответ в отельное окно. Если True, то выводим в jupiter notebook
+reshape = True переводит изображение в размер 720 на 480. По умолчанию False (исходный размер)
 
 Так же данная функция выдает на выходе число задетектированных объектов каждого класса
 '''
@@ -14,11 +15,14 @@ def detect_and_visualize(image_input,
                          treshhold=0.7,
                          classes=['-','person'],
                          model_path='models/model_human_detection.pth',
-                         plt_show='False'):
+                         plt_show='False',
+                         reshape=False):
     import torch
     import torchvision
     from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
     import cv2
+    import warnings
+    warnings.filterwarnings("ignore")
 
     if plt_show:
         from  matplotlib import pyplot as plt
@@ -73,8 +77,10 @@ def detect_and_visualize(image_input,
         print(f"Объектов класса {key} обнаружено {dict_classes[key]}")
     if dict_classes == {}:
         print(f"Ни один объект не обнаружен")
-
-    image = cv2.resize(image, (720, 480)) 
+    
+    # Изменим размер при необходимости:
+    if reshape:
+        image = cv2.resize(image, (720, 480))
     
     # Демонстрация результатов:
     if plt_show:

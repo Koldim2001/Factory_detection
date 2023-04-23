@@ -78,7 +78,7 @@ def train(model, train_data_loader, optimizer,
 
             # Запишем в TensorBoard значение суммарного лосса на валидации:
             writer.add_scalar('Summ validation loss during epochs',
-                            val_total_loss/len(val_data_loader) , epoch+1)
+                            val_total_loss/len(val_data_loader), epoch+1)
             print(f'Validation summ loss after {epoch+1} epochs = {val_total_loss/len(val_data_loader)}')
 
         '''
@@ -94,4 +94,5 @@ def train(model, train_data_loader, optimizer,
             
     # Закрытие Tensorboard
     writer.close()   
+    print('Обучение завершено')
 
