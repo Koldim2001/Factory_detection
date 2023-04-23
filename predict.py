@@ -12,7 +12,7 @@ reshape = True переводит изображение в размер 720 н�
 
 
 def detect_and_visualize(image_input,
-                         treshhold=0.7,
+                         treshhold=0.85,
                          classes=['-','person'],
                          model_path='models/model_human_detection.pth',
                          plt_show='False',
@@ -78,6 +78,7 @@ def detect_and_visualize(image_input,
     if dict_classes == {}:
         print(f"Ни один объект не обнаружен")
     
+    
     # Изменим размер при необходимости:
     if reshape:
         image = cv2.resize(image, (720, 480))
@@ -86,6 +87,7 @@ def detect_and_visualize(image_input,
     if plt_show:
         plt.figure(figsize=(9, 7), dpi=80)
         plt.title(f'Prediction')
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         plt.imshow(image)
         plt.show()
     else:
