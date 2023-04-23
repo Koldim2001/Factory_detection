@@ -3,3 +3,5 @@
 .ipynb_checkpoints
 /augmented_dataset
 /runs
+/detect_hat_dataset
+/augmented_hat_dataset
