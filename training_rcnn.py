@@ -1,7 +1,7 @@
 # train - код, реализующий обучение нейронной сети
 
 def train(model, train_data_loader, optimizer,
-          val_data_loader, num_epochs=2, comment='test', device='cpu'):
+          val_data_loader, save_path, num_epochs=2, comment='test', device='cpu'):
     
     import torch, torchvision
     from tqdm import tqdm
@@ -90,7 +90,7 @@ def train(model, train_data_loader, optimizer,
             state_dict = model.state_dict()
             print('Сохраним новую модель, так как текущая конфигурация имеет ниже val loss')
             best_loss = val_total_loss/len(val_data_loader)
-            torch.save(state_dict, 'models/model_human_detection.pth')
+            torch.save(state_dict, save_path)
             
     # Закрытие Tensorboard
     writer.close()   
