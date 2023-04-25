@@ -71,12 +71,13 @@ def aug(image_dir="detect_dataset/images",
     print('Итоговое число фотографий и аннотаций =', len(os.listdir(out_folder + '/images')))
 
 
-def plot_random_image(train_data_loader):
+def plot_random_image(train_data_loader, hat_class=False):
     '''
     Визуализирует случайную фотографию из датасета, на которой 
     рисует bounding box исходя из xml файла анотации. Так же подписывает
     имя класса над боксом и выбирает цвет отображения разный
     для разных поданных классов
+    PS: hat_class=True когда у нас задача двухклассвой детекции
     '''
     import numpy as np
     import cv2
@@ -92,7 +93,10 @@ def plot_random_image(train_data_loader):
         annot = label_batch[i]
 
         # Зададим наименования классов:
-        class_detect = ['none','person']
+        if hat_class:
+            class_detect = ['none','hardhat', 'no_hardhat'] 
+        else:
+            class_detect = ['none','person']
 
         # Зададим цветовое отображение для классов:
         color_class = [(0,0,255), (0,255,0), (255,50,0)]
