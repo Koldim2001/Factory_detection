@@ -35,56 +35,55 @@ def calculate_iou(model, dataset, treshold=0.85):
 
 def recall(box_iou, iou_threshold=0.5):
     """
-    Вычисляет recall для заданного box_iou и порогового значения IoU (IoU threshold).
+    Рассчитывает метрику precision для заданного тензора коэффициентов IoU и порогового значения IoU.
 
     Параметры:
     - box_iou: тензор коэффициентов IoU размерности [N, M], где N и M - количество ограничивающих рамок.
     - iou_threshold: пороговое значение IoU, при котором детектированный объект считается правильно классифицированным.
 
     Возвращает:
-    - recall: метрика recall для заданного box_iou и порогового значения IoU.
+    - recall: метрика recall для заданного тензора коэффициентов IoU и порогового значения IoU.
     """
-    import torch
+    import torch 
 
-    TP = 0  # количество правильно классифицированных объектов
-    FN = 0  # количество неправильно классифицированных объектов
+    num_real_boxes = box_iou.shape[1]  # количество реальных объектов
+
+    num_correct_boxes = 0  # количество правильно классифицированных объектов
 
     for i in range(box_iou.shape[1]):
-        max_iou = torch.max(box_iou[:, i])  # максимальное значение IoU для i-го истинного объекта
+        max_iou = torch.max(box_iou[:, i])  # максимальное значение IoU для i-го обнаруженного объекта
         if max_iou >= iou_threshold:
-            TP += 1
-        else:
-            FN += 1
-
-    recall = TP / (TP + FN)
+            num_correct_boxes += 1
+        
+    recall = num_correct_boxes / num_real_boxes if num_real_boxes > 0 else 0.0
     return recall
 
 
 def precision(box_iou, iou_threshold=0.5):
     """
-    Вычисляет precision для заданного box_iou и порогового значения IoU (IoU threshold).
+    Рассчитывает метрику precision для заданного тензора коэффициентов IoU и порогового значения IoU.
 
     Параметры:
     - box_iou: тензор коэффициентов IoU размерности [N, M], где N и M - количество ограничивающих рамок.
     - iou_threshold: пороговое значение IoU, при котором детектированный объект считается правильно классифицированным.
 
     Возвращает:
-    - precision: точность (precision) для заданного box_iou и порогового значения IoU.
+    - precision: метрика precision для заданного тензора коэффициентов IoU и порогового значения IoU.
     """
     import torch
     
-    TP = 0  # количество правильно классифицированных объектов
-    FP = 0  # количество неправильно классифицированных объектов
+    num_correct_boxes = 0  # количество правильно классифицированных объектов
 
     for i in range(box_iou.shape[0]):
-        max_iou = torch.max(box_iou[i])  # максимальное значение IoU для i-й детектированной рамки
+        max_iou = torch.max(box_iou[i, :])  # максимальное значение IoU для i-го обнаруженного объекта
         if max_iou >= iou_threshold:
-            TP += 1
-        else:
-            FP += 1
+            num_correct_boxes += 1
 
-    precision = TP / (TP + FP)
-    return precision
+    delta = num_correct_boxes - box_iou.shape[1]
+    if delta <= 0:
+        return 1
+    else:
+        return box_iou.shape[1] / num_correct_boxes
 
 
 def mean_metric(list_iou_boxes, func, iou_treshold=0.5):

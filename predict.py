@@ -13,7 +13,7 @@ reshape = True переводит изображение в размер 720 н�
 
 def detect_and_visualize(image_input,
                          treshhold=0.85,
-                         classes=['-','person'],
+                         classes=['-', 'person'],
                          model_path='models/model_human_detection.pth',
                          plt_show='False',
                          reshape=False):
@@ -45,10 +45,14 @@ def detect_and_visualize(image_input,
         image = image_input
     image_tensor = torchvision.transforms.functional.to_tensor(image)
 
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model.to(device)
+
     # Получение предсказаний на основе загруженной модели и тензора с изображением
     model.eval()
     with torch.no_grad():
-        predictions = model([image_tensor])
+        predictions = model([image_tensor.to(device)])
+        #predictions = predictions.to('cpu')
 
     # Визуализация полученных bounding boxes с подписью класса детекции
     for i, prediction in enumerate(predictions[0]['boxes']):
@@ -96,3 +100,65 @@ def detect_and_visualize(image_input,
         cv2.destroyAllWindows()
 
 
+def visualize_detection(dataset, model, idx):
+
+    import cv2
+    from torchvision.ops.boxes import box_iou
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import torch
+    import torchvision.transforms.functional as TF
+
+    # Get the image and the target for the given index
+    image, target = dataset[idx]
+    
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model.to(device)
+
+    # Put the model in evaluation mode
+    model.eval()
+
+    # Make predictions
+    with torch.no_grad():
+        prediction = model([image.to(device)])
+    
+    # Get the predicted bounding boxes and their corresponding labels
+    predicted_boxes = prediction[0]['boxes'].cpu()
+    predicted_labels = prediction[0]['labels'].cpu()
+    
+    # Get the ground truth bounding boxes and their corresponding labels
+    true_boxes = target['boxes']
+    true_labels = target['labels']
+    
+    # Convert the PyTorch tensor image to a NumPy array
+    image = TF.to_pil_image(image)
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    
+    # Draw the predicted boxes in red
+    for box in predicted_boxes:
+        x1, y1, x2, y2 = box.int()
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+        
+    # Draw the ground truth boxes in green
+    for box in true_boxes:
+        x1, y1, x2, y2 = box.int()
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    
+    # Calculate the IOU for each predicted box and the corresponding true box
+    ious = []
+    for i, predicted_box in enumerate(predicted_boxes):
+        iou_max = 0
+        for j, true_box in enumerate(true_boxes):
+            iou = box_iou(predicted_box, true_box)
+            if iou > iou_max:
+                iou_max = iou
+        ious.append(iou_max)
+    
+    # Add the IOU values as text to the image
+    for i, iou in enumerate(ious):
+        x1, y1, _, _ = predicted_boxes[i].int()
+        cv2.putText(image, f'{iou:.2f}', (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+    
+    # Show the image using matplotlib
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.show()
