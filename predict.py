@@ -45,14 +45,10 @@ def detect_and_visualize(image_input,
         image = image_input
     image_tensor = torchvision.transforms.functional.to_tensor(image)
 
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model.to(device)
-
     # Получение предсказаний на основе загруженной модели и тензора с изображением
     model.eval()
     with torch.no_grad():
-        predictions = model([image_tensor.to(device)])
-        #predictions = predictions.to('cpu')
+        predictions = model([image_tensor])
 
     # Визуализация полученных bounding boxes с подписью класса детекции
     for i, prediction in enumerate(predictions[0]['boxes']):

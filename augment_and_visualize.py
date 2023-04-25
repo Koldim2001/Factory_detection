@@ -69,3 +69,45 @@ def aug(image_dir="detect_dataset/images",
             flipped_image.save(new_image_path)           
     print('Исходное число фотографий и аннотаций =', len(os.listdir(image_dir)))
     print('Итоговое число фотографий и аннотаций =', len(os.listdir(out_folder + '/images')))
+
+
+def plot_random_image(train_data_loader):
+    '''
+    Визуализирует случайную фотографию из датасета, на которой 
+    рисует bounding box исходя из xml файла анотации. Так же подписывает
+    имя класса над боксом и выбирает цвет отображения разный
+    для разных поданных классов
+    '''
+    import numpy as np
+    import cv2
+    from  matplotlib import pyplot as plt
+
+    image_batch, label_batch = next(iter(train_data_loader))
+
+    # Пройдемся в цикле по двум первым фоткам в рандомном батче:
+    for i, image in enumerate(image_batch[0:1]):
+        image = np.transpose(image, (1, 2, 0))
+        img = image.numpy().copy() 
+        img = (img * 255).astype(np.uint8)
+        annot = label_batch[i]
+
+        # Зададим наименования классов:
+        class_detect = ['none','person']
+
+        # Зададим цветовое отображение для классов:
+        color_class = [(0,0,255), (0,255,0), (255,50,0)]
+
+        # Пройдемся в цикле по всем боксам на изображении
+        for j in range(annot['boxes'].size()[0]):
+                [xmin, ymin, xmax, ymax] = annot['boxes'][j]
+                xmin = int(xmin)
+                ymin = int(ymin)
+                xmax = int(xmax)
+                ymax = int(ymax)
+                n_class = int(annot['labels'][j])
+                text = class_detect[n_class] 
+                img = cv2.rectangle(img, (xmin, ymin), (xmax, ymax), color_class[n_class], 2)
+                img = cv2.putText(img, text, (xmin, ymin - 15),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 2, color_class[n_class], 3)
+        plt.imshow(img)
+        plt.show()
