@@ -97,29 +97,7 @@ def mean_metric(list_iou_boxes, func, iou_treshold=0.5):
         if func == 'precision':
             metric.append(precision(box_iou=i, iou_threshold=iou_treshold))
     return sum(metric) / len(list_iou_boxes)
-           
-
-def calculate_ap(box_iou_list, iou_threshold):
-    """
-    Вычисляет метрику AP для списка тензоров коэффициентов IoU и порогового значения IoU.
-
-    Параметры:
-    - box_iou_list: список тензоров коэффициентов IoU размерности [N, M], где N и M - количество ограничивающих рамок.
-    - iou_threshold: пороговое значение IoU, при котором детектированный объект считается правильно классифицированным.
-
-    Возвращает:
-    - ap: значение метрики AP для всех изображений в списке box_iou_list.
-    """
-    import torch 
-    from sklearn.metrics import average_precision_score
-
-    y_true = []
-    y_scores = []
-    for box_iou in box_iou_list:
-        y_true += [1 if iou >= iou_threshold else 0 for iou in box_iou]
-        y_scores += [iou for iou in box_iou]
-    return average_precision_score(y_true, y_scores)
-
+        
 
 def precision_recall_curve(model, dataset, treshold_score=0.85, n_steps=100):
     '''

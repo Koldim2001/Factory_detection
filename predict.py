@@ -1,15 +1,3 @@
-'''
-Функция detect_and_visualize реализует загрузку нужной модели и построение
-итогового изображения, на котором расставлены bounding боксы и подписаны классы
-На вход подается image_input в виде пути к файлу или уже трехмерной матрицы [h,w,c]
-treshhold - значение минимального порога уверенности классификатора в боксе
-classes - list, содержащий наименования классов
-plt_show = 'False'-тогда выводим ответ в отельное окно. Если True, то выводим в jupiter notebook
-reshape = True переводит изображение в размер 720 на 480. По умолчанию False (исходный размер)
-
-Так же данная функция выдает на выходе число задетектированных объектов каждого класса
-'''
-
 
 def detect_and_visualize(image_input,
                          treshhold=0.85,
@@ -17,6 +5,19 @@ def detect_and_visualize(image_input,
                          model_path='models/model_human_detection.pth',
                          plt_show='False',
                          reshape=False):
+    '''
+    Функция detect_and_visualize реализует загрузку нужной модели и построение
+    итогового изображения, на котором расставлены bounding боксы и подписаны классы
+    На вход подается image_input в виде пути к файлу или уже трехмерной матрицы [h,w,c]
+    treshhold - значение минимального порога уверенности классификатора в боксе
+    classes - list, содержащий наименования классов
+    plt_show = 'False'-тогда выводим ответ в отельное окно.
+    Если True, то выводим в jupiter notebook
+    reshape = True переводит изображение в размер 720 на 480.
+    По умолчанию False (исходный размер)
+
+    Так же данная функция выдает на выходе число задетектированных объектов каждого класса
+    '''
     import torch
     import torchvision
     from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
@@ -97,7 +98,10 @@ def detect_and_visualize(image_input,
 
 
 def visualize_detection(dataset, model, idx):
-
+    '''
+    Данная функция визуализирует для заданной фотографии из датасета рельный
+    и предсказанный bounding боксы. Над боксом указывает значение IOU
+    '''
     import cv2
     from torchvision.ops.boxes import box_iou
     import numpy as np
@@ -105,56 +109,62 @@ def visualize_detection(dataset, model, idx):
     import torch
     import torchvision.transforms.functional as TF
 
-    # Get the image and the target for the given index
+    # Получаем изображение и цель для заданного индекса
     image, target = dataset[idx]
-    
+        
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model.to(device)
 
-    # Put the model in evaluation mode
+    # Переводим модель в evaluation mode
     model.eval()
 
-    # Make predictions
+    # Получаем предсказания
     with torch.no_grad():
         prediction = model([image.to(device)])
     
-    # Get the predicted bounding boxes and their corresponding labels
+    # Получаем предсказанные ограничивающие рамки и соответствующие метки
     predicted_boxes = prediction[0]['boxes'].cpu()
     predicted_labels = prediction[0]['labels'].cpu()
     
-    # Get the ground truth bounding boxes and their corresponding labels
+    # Получаем настоящие ограничивающие рамки и соответствующие метки
     true_boxes = target['boxes']
     true_labels = target['labels']
     
-    # Convert the PyTorch tensor image to a NumPy array
+    # Преобразуем тензор изображения PyTorch в массив NumPy
     image = TF.to_pil_image(image)
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    
-    # Draw the predicted boxes in red
+
+    # Рисуем предсказанные рамки зеленым цветом
     for box in predicted_boxes:
         x1, y1, x2, y2 = box.int()
-        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 225, 50), 3)
         
-    # Draw the ground truth boxes in green
+    # Реальные боксы рисуем красными
     for box in true_boxes:
         x1, y1, x2, y2 = box.int()
-        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 20, 255), 3)
     
-    # Calculate the IOU for each predicted box and the corresponding true box
+    # Вычисляем IOU для каждой пары боксов predict & truth
     ious = []
     for i, predicted_box in enumerate(predicted_boxes):
         iou_max = 0
         for j, true_box in enumerate(true_boxes):
-            iou = box_iou(predicted_box, true_box)
+            
+            iou = box_iou(torch.tensor([predicted_box.tolist()]),
+                          torch.tensor([true_box.tolist()]))
             if iou > iou_max:
                 iou_max = iou
         ious.append(iou_max)
     
-    # Add the IOU values as text to the image
+    # Добавляем текст сверху со значением IOU
     for i, iou in enumerate(ious):
         x1, y1, _, _ = predicted_boxes[i].int()
-        cv2.putText(image, f'{iou:.2f}', (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+        cv2.putText(image, f'{float(iou[0][0]):.2f}', (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 255), 2)
     
-    # Show the image using matplotlib
+    plt.figure(figsize=(10, 5))
+    plt.title('IOU')
     plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     plt.show()
+    
