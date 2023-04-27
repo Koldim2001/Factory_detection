@@ -89,7 +89,7 @@ def plot_random_image(train_data_loader, hat_class=False):
     image = np.transpose(image, (1, 2, 0))
     img = image.numpy().copy() 
     img = (img * 255).astype(np.uint8)
-    annot = label_batch[i]
+    annot = label_batch[0]
 
     # Зададим наименования классов:
     if hat_class:
