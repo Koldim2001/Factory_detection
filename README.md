@@ -3,9 +3,10 @@
 
 ### Как запускать код на python 3:
 ```rb
-# Загрузка функции и требуемых библиотек
+pip install -r requirements.txt
+
+python
 from predict import *
-!pip install -r requirements.txt
 
 # Запуск функции детекции людей:
 detect(path='test.jpg')
