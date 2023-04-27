@@ -1,4 +1,5 @@
 torch
 torchvision
-cv2
+opencv-python
 pytest-warnings
+gdown
