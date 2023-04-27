@@ -68,7 +68,7 @@ def detect_and_visualize(image_input,
         # Словарь в котором будут указано сколько объектов каждого класса обнаружено:
         if label_name not in dict_classes:
             dict_classes[label_name] = 0
-        dict_classes[label_name] +=1
+        dict_classes[label_name] += 1
 
         x1, y1, x2, y2 = predictions[0]['boxes'][i].tolist()
         cv2.putText(image, label_name, (int(x1), int(y1)-5), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
