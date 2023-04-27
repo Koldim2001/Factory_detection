@@ -33,6 +33,6 @@ _Примеры результатов работы двух разных обу
 </div>
 
 <div style="text-align:center;">
-  <img src="https://drive.google.com/uc?id=1Dtu_bK9w5Hl65A6lETChuu1Ftz2wirUi" alt="Alt person detection" width="220" height="125">
-  <img src="https://drive.google.com/uc?id=105RsKrPwpzGLTbyUYjKDsDRP0bd6IUIT" alt="Alt hardhat detection" width="220" height="125">
+  <img src="https://drive.google.com/uc?id=1Dtu_bK9w5Hl65A6lETChuu1Ftz2wirUi" alt="Alt person detection" width="330" height="188">
+  <img src="https://drive.google.com/uc?id=105RsKrPwpzGLTbyUYjKDsDRP0bd6IUIT" alt="Alt hardhat detection" width="330" height="188">
 </div>
