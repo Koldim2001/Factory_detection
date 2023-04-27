@@ -28,8 +28,8 @@ python detecting.py
 _Примеры результатов работы двух разных обученных моделей:_
 
 <div style="text-align:center;">
-  <img src="https://drive.google.com/uc?id=1Dtu_bK9w5Hl65A6lETChuu1Ftz2wirUi" alt="Alt person detection" width="440" height="250">
-  <img src="https://drive.google.com/uc?id=105RsKrPwpzGLTbyUYjKDsDRP0bd6IUIT" alt="Alt hardhat detection" width="440" height="250">
+  <img src="https://drive.google.com/uc?id=1Dtu_bK9w5Hl65A6lETChuu1Ftz2wirUi" alt="Alt person detection" width="375" height="215">
+  <img src="https://drive.google.com/uc?id=105RsKrPwpzGLTbyUYjKDsDRP0bd6IUIT" alt="Alt hardhat detection" width="375" height="215">
 </div>
 
 <div style="text-align:center;">
