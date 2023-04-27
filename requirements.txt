@@ -1,0 +1,4 @@
+torch
+torchvision
+cv2
+pytest-warnings

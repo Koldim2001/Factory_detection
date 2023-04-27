@@ -168,3 +168,56 @@ def visualize_detection(dataset, model, idx):
     plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     plt.show()
     
+
+def download_models(folder_name='models'):
+    '''
+    Функция для загрузки моделей обученных нейронных сетей в папку folder_name 
+    из моего гугл диска
+    '''
+    import gdown
+    import os
+
+    # Создание пустой папки 
+    if not os.path.exists(folder_name):
+        os.mkdir(folder_name)
+
+    url_1 = "https://drive.google.com/uc?id=15BK4n4NjAahbv6yImTJgLMCsQAeX1LCC"
+    output_1 = folder_name + "/model_human_detection_final.pth"
+    url_2 = "https://drive.google.com/uc?id=1_66F4THF8-Nws3yodKWxSdXjrmoFANBF"
+    output_2 = folder_name + "/model_hardhat_detection_final.pth"
+
+    gdown.download(url_1, output_1, quiet=False)
+    gdown.download(url_2, output_2, quiet=False)
+
+
+def detect(path, hardhat_detection=False):
+    '''
+    Главная функция проекта. Реализует загрузку моделей, осуществяет детекцию любого входного изображения.
+
+    На вход функции подаются: \n
+      path - путь к изображению \n
+      hardhat_detection (по умолчанию False) - выбирает вид детекции.
+      Если False, то осуществляется детекция людей (1 класс).
+      Если True, то определяются 2 класса: человек к каской или человек без каски
+    '''
+    import os
+
+    # Загрузка с гугл диска обученных моделей
+    if not (os.path.exists('models/model_hardhat_detection_final.pth') and 
+            os.path.exists('models/model_human_detection_final.pth')):
+        download_models(folder_name='models')
+
+    if hardhat_detection:
+        detect_and_visualize(path,
+                             treshhold=0.5,
+                             classes=['hardhat','no_harhat'],
+                             model_path='models/model_hardhat_detection_final.pth')
+    else:
+        detect_and_visualize(path,
+                             treshhold=0.85,
+                             classes=['person'],
+                             model_path='models/model_human_detection_final.pth')
+    
+    
+
+        
