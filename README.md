@@ -2,9 +2,10 @@
 Проект по созданию системы безопасности на предприятии, реализующей детектирование людей и автоматическую проверку наличия касок по изображениям с видеокамер
 
 ### Как запускать код в командной строке:
+
+(данные команды требуется запускать построчно в терминале)
 ```rb
 pip install -r requirements.txt
-
 python
 from predict import *
 ```
@@ -17,5 +18,5 @@ detect(path='test.jpg')
 ```
 2. Запуск функции детекции касок:
 ```rb
-detect(path='test.jpg, hardhat_detection=True)
+detect(path='test.jpg', hardhat_detection=True)
 ```
