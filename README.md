@@ -7,10 +7,15 @@ pip install -r requirements.txt
 
 python
 from predict import *
+```
 
-# Запуск функции детекции людей:
+Далее в зависимости от задачи: 
+
+1. Запуск функции детекции людей:
+```rb
 detect(path='test.jpg')
-
-# Запуск функции детекции касок:
+```
+2. Запуск функции детекции касок:
+```rb
 detect(path='test.jpg, hardhat_detection=True)
 ```
