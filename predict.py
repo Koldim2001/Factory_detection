@@ -8,7 +8,7 @@ def detect_and_visualize(image_input,
     '''
     Функция detect_and_visualize реализует загрузку нужной модели и построение
     итогового изображения, на котором расставлены bounding боксы и подписаны классы
-    На вход подается image_input в виде пути к файлу или уже трехмерной матрицы [h,w,c]
+    На вход подается image_input в виде пути к файлу 
     treshhold - значение минимального порога уверенности классификатора в боксе
     classes - list, содержащий наименования классов
     plt_show = 'False'-тогда выводим ответ в отельное окно.
@@ -40,10 +40,7 @@ def detect_and_visualize(image_input,
     model.load_state_dict(torch.load(model_path))
 
     # Загрузка изображения и его преобразование в тензор
-    if type(image_input) == str:
-        image = cv2.imread(image_input)
-    else:
-        image = image_input
+    image = cv2.imread(image_input)
     image_tensor = torchvision.transforms.functional.to_tensor(image)
 
     # Получение предсказаний на основе загруженной модели и тензора с изображением
