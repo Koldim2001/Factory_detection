@@ -2,4 +2,5 @@ torch
 torchvision
 opencv-python
 pytest-warnings
+matplotlib
 gdown

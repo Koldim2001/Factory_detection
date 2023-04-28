@@ -23,11 +23,9 @@ def detect_and_visualize(image_input,
     from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
     import cv2
     import warnings
+    from matplotlib import pyplot as plt
     warnings.filterwarnings("ignore")
-
-    if plt_show:
-        from  matplotlib import pyplot as plt
-
+    
     if classes[0] != '-':
         classes = ['-'] + classes
     
@@ -178,6 +176,7 @@ def download_models(folder_name='models'):
     if not os.path.exists(folder_name):
         os.mkdir(folder_name)
 
+    print('Загружаю модели нейронных сетей:')
     url_1 = "https://drive.google.com/uc?id=15BK4n4NjAahbv6yImTJgLMCsQAeX1LCC"
     output_1 = folder_name + "/model_human_detection_final.pth"
     url_2 = "https://drive.google.com/uc?id=1_66F4THF8-Nws3yodKWxSdXjrmoFANBF"
