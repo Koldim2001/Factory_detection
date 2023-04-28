@@ -13,7 +13,7 @@ def calculate_iou(model, dataset, treshold=0.85):
     model.to(device)
     model.eval()
     iou_scores = []
-    for i in tqdm(range(len(dataset))):
+    for i in range(len(dataset)):
         img, target = dataset[i]
         img = img.unsqueeze(0).to(device)
         with torch.no_grad():
@@ -98,28 +98,6 @@ def mean_metric(list_iou_boxes, func, iou_treshold=0.5):
             metric.append(precision(box_iou=i, iou_threshold=iou_treshold))
     return sum(metric) / len(list_iou_boxes)
         
-
-def precision_recall_curve(model, dataset, treshold_score=0.85, n_steps=100):
-    '''
-    Создает списки list_recall, list_precission для значений метрик точность и полнота
-    при значениях порога IOU от 0 до 1 шагом n_steps
-    treshold_score - входной параметр минимального скора для оценуи результата детекции
-    '''
-    import numpy as np
-
-    iou_scores_list = calculate_iou(model, dataset, treshold=treshold_score)
-    tresh = np.array(range(n_steps + 1)) / 10
-    list_precission = []
-    list_recall = []
-    for val in tresh:
-        list_precission.append(mean_metric(iou_scores_list,
-                                            func='precision',
-                                            iou_treshold=val))
-        list_recall.append(mean_metric(iou_scores_list,
-                                    func='recall',
-                                    iou_treshold=val))
-    return list_recall, list_precission
-
 
 def average_precision(recall, precision):
     """
