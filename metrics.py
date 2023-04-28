@@ -129,3 +129,67 @@ def average_precision(recall, precision):
 
     # Возвращаем значение average precision.
     return ap
+
+
+def mAP_AP_dataset(dataset, model, multiclasses=False):
+    '''
+    Функция по подсчету mAP и AP по всему валидационному датасету. 
+    Исользует готовый покет torchmetrics.detection для релизации
+    multiclasses=False => считать AP
+    multiclasses=True => считать mAP
+    '''
+    from tqdm import tqdm
+    import torch
+    from torchmetrics.detection.mean_ap import MeanAveragePrecision
+
+    device = "cpu"
+    model.to(device)
+    predict_list=[]
+    target_list=[]
+
+    # Пройдем по всему датасету чтобы сложить результаты предиктов и truth в один суммарный список
+    model.eval()
+    for i in tqdm(range(len(dataset))):
+        img, target = dataset[i]
+        img = img.unsqueeze(0).to(device)
+        with torch.no_grad():
+            prediction = model(img)
+        predict_list.append(prediction[0])
+        target_list.append(target)
+
+    if multiclasses:
+        metric = MeanAveragePrecision(class_metrics=True)
+        metric.update(predict_list, target_list)
+        metrics = metric.compute()
+
+        # Вывод результатов в консоль:
+        print('\n')
+        print('Значения Average Precision для каждого класса:')
+        print('AP (среднее по порогам IoU=.50:.05:.95) для класса WITH HARDHAT =',
+            round(float(metrics['map_per_class'][0]),4))
+        print('AP (среднее по порогам IoU=.50:.05:.95) для класса WITHOUT HARDHAT =',
+            round(float(metrics['map_per_class'][1]),4))
+        print('\n')
+        print('Значения Mean Average Precision:')
+        print('mAP (среднее по порогам IoU=.50:.05:.95) =',
+            round(float(metrics['map']),4))
+        print('mAP (при IoU=.50) =', round(float(metrics['map_50']), 4))
+        print('mAP (при IoU=.70) =', round(float(metrics['map_75']), 4))
+        print('mAP (для малых объектов, у которых площадь < 32*32 пикселя) =',
+            round(float(metrics['map_small']),4))
+        print('mAP (для средних объектов, у которых площадь от 32*32 до 64*64 пикселя) =',
+            round(float(metrics['map_medium']),4))
+        print('mAP (для больших объектов, у которых площадь > 64*64 пикселя) =',
+            round(float(metrics['map_large']),4))
+    else:
+        print('\n')
+        metric = MeanAveragePrecision()
+        metric.update(predict_list, target_list)
+        metrics = metric.compute()
+        print('Значения Average Precision для класса person:')
+        print('AP (при IoU=.50) =', round(float(metrics['map_50']), 4))
+
+        
+
+
+        
