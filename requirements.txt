@@ -4,3 +4,4 @@ opencv-python
 pytest-warnings
 matplotlib
 gdown
+python-telegram-bot==13.7 --force-reinstall
