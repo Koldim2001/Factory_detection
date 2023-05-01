@@ -65,3 +65,10 @@ python tg_bot.py
 
 PS: Данный сервер может быть единовременно запущен лишь на одном компьютере. Так что перед самостоятельным запуском убедитесь, что бот не работает, либо попросите [меня](https://t.me/kolesnikov_dima) его самостоятельно запустить для демонстрации.
 
+
+<div style="text-align:center;">
+  <img src="https://drive.google.com/uc?id=1au_NM4-QQu79yBWcrm5LBG-0JmbO6g5l" alt="bot" width="200" height="440">
+  <img src="https://drive.google.com/uc?id=1noURImDlrFe3jVV68RrIFjgw8Bh-uunq" alt="bot" width="200" height="440">
+  <img src="https://drive.google.com/uc?id=1Lwj2ao9s9TB264E67WHXC8KibcL8GQz1" alt="bot" width="200" height="440">
+</div>
+
