@@ -67,8 +67,8 @@ PS: Данный сервер может быть единовременно з�
 
 
 <div style="text-align:center;">
-  <img src="https://drive.google.com/uc?id=1au_NM4-QQu79yBWcrm5LBG-0JmbO6g5l" alt="bot" width="200" height="440">
-  <img src="https://drive.google.com/uc?id=1noURImDlrFe3jVV68RrIFjgw8Bh-uunq" alt="bot" width="200" height="440">
-  <img src="https://drive.google.com/uc?id=1Lwj2ao9s9TB264E67WHXC8KibcL8GQz1" alt="bot" width="200" height="440">
+  <img src="https://drive.google.com/uc?id=1xNha5UU20tnCLcJ8NtqVBoob2nSBItqx" alt="bot" width="200" height="440">
+  <img src="https://drive.google.com/uc?id=1Sl7vWF8BJ4ZQ5FmF-wIiMHVxdmiCbB63" alt="bot" width="200" height="440">
+  <img src="https://drive.google.com/uc?id=1Ygvw8S9wik_n_UigFjCggajAOM1u_suc" alt="bot" width="200" height="440">
 </div>
 
