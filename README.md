@@ -65,7 +65,7 @@ python tg_bot.py
 
 PS: Данный сервер может быть единовременно запущен лишь на одном компьютере. Так что перед самостоятельным запуском убедитесь, что бот не работает, либо попросите [меня](https://t.me/kolesnikov_dima) его самостоятельно запустить для демонстрации.
 
-
+Пример работы телеграм бота:
 <div style="text-align:center;">
   <img src="https://drive.google.com/uc?id=1xNha5UU20tnCLcJ8NtqVBoob2nSBItqx" alt="bot" width="200" height="440">
   <img src="https://drive.google.com/uc?id=1Sl7vWF8BJ4ZQ5FmF-wIiMHVxdmiCbB63" alt="bot" width="200" height="440">
