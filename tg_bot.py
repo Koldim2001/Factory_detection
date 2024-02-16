@@ -92,7 +92,7 @@ def process_photo(update: Update, context: CallbackContext) -> None:
     context.bot.send_photo(chat_id=update.message.chat_id, photo=img_bytes)
 
 # Инициализация бота
-updater = Updater("1675188280:AAH5Wiqf8jcSKL47t97gIAi-3EtOM_cHw8c")
+updater = Updater("6940245246:AAEpt50XeX6CjKstL3cA8D5KNgCTA3zf6Ck")
 
 # Добавляем обработчик сообщений с фотографией
 updater.dispatcher.add_handler(MessageHandler(Filters.photo, process_photo))
